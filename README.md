@@ -65,6 +65,5 @@ and extract it in Models/
 
 ## Contact
 
-* Main author: [Szymon Płotka](plotkaszymon@gmail.com)
-* Ermlab Software [E-mail](office@ermlab.com)
-* CEO of Ermlab Software [Krzysztof Sopyła](krzysztofsopyla@gmail.com)
+* Main author: [Szymon Płotka](https://github.com/simongeek)
+* CEO of Ermlab Software [Krzysztof Sopyła](https://github.com/ksopyla)
