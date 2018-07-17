@@ -1,55 +1,70 @@
+# Long Short-Term Memory for Sentiment Analysis task
+# Define necessary packages
+
 import numpy as np
 import pandas as pd
 import matplotlib.pylab as plt
-from livelossplot import PlotLossesKeras
-np.random.seed(7)
 from sklearn.model_selection import train_test_split
 from keras.preprocessing.text import Tokenizer
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation, LSTM, Bidirectional
+from keras.layers import Dense
+from keras.layers import Dropout
+from keras.layers import Activation
+from keras.layers import LSTM
 from keras.layers.embeddings import Embedding
 from keras.utils import np_utils
 from keras.preprocessing import sequence
-from gensim.models import Word2Vec, KeyedVectors, word2vec
+from sklearn.metrics import recall_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import f1_score
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import roc_curve
+from sklearn.metrics import auc
+from wordcloud import WordCloud
+from many_stop_words import get_stop_words
+from scipy import interp
+from itertools import cycle
+from gensim.models import Word2Vec
+from gensim.models import KeyedVectors
+from gensim.models import word2vec
 import gensim
+import seaborn as sn
 from gensim.utils import simple_preprocess
 from keras.utils import to_categorical
 import pickle
 import h5py
 from time import time
+np.random.seed(7)
 
+# Initializing process
 print("Initializing...")
 initial_time = time()
 
-# Load our dataset
-
+#Load dataset
 filename = 'Data/Dataset.csv'
-
 dataset = pd.read_csv(filename, delimiter = ",", nrows=200000)
-
 dataset.apply(np.random.permutation, axis=1)
-
 print(dataset.head())
 
 # Delete unused column
 del dataset['length']
 
-# Delete All NaN values from columns=['description','rate']
+# Delete All NaN values from columns -> ['description','rate']
 dataset = dataset[dataset['description'].notnull() & dataset['rate'].notnull()]
 
-# We set all strings as lower case letters
+# Set all strings as lower case letters
 dataset['description'] = dataset['description'].str.lower()
 
 
-# Split data into training set and validation
-
+# Split data into training, test and validation set (60:20:20)
 X = dataset['description']
 y = dataset['rate']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42)
-
 X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.20, random_state=42)
 
+# Print X, y train, test and validation shapes
 print("X_train shape: " + str(X_train.shape))
 print("X_test shape: " + str(X_test.shape))
 print("X_val shape: " + str(X_val.shape))
@@ -58,15 +73,17 @@ print("y_test shape: " + str(y_test.shape))
 print("y_val shape: " + str(y_val.shape))
 
 # Load existing word2vec model
-
 word2vec_model = gensim.models.KeyedVectors.load_word2vec_format('nkjp.txt', binary=False)
 
+# Define embedding matrix
 embedding_matrix = word2vec_model.wv.syn0
 print('Shape of embedding matrix: ', embedding_matrix.shape)
 
 # Vectorize X_train and X_test to 2D tensor
 top_words = embedding_matrix.shape[0]
-mxlen = 20
+
+# Define max lenght of sentence and number of classes (negative, neutral and positive)
+mxlen = 30
 nb_classes = 3
 
 tokenizer = Tokenizer(num_words=top_words)
@@ -88,14 +105,37 @@ y_test = np_utils.to_categorical(y_test, nb_classes)
 y_val = np_utils.to_categorical(y_val, nb_classes)
 
 
-# Define our LSTM
-
-batch_size = 32
-nb_epoch = 1
-
-
+"""Emedding layer: this layer can only be used as the first layer in a model.
+   Arguments:
+        input_dim: int > 0.
+        output_dim: int >=0.
+    
+"""
 embedding_layer = Embedding(embedding_matrix.shape[0],
                             embedding_matrix.shape[1])
+
+"""Define Neural Network Architecture.
+   Layers:
+        embedding_layer: (embedding_matrix.shape[0], embedding_matrix.shape[1])
+        LSTM1: (neurons, dropout, recurrent_dropout, return_sequences)
+        LSTM2: (neurons, dropout, recurrent_dropout)
+        Dense1: Full-connected layer (neurons, activation function)
+        Dense2: Full-connected layer (neurons on output)
+        Activation: (activation function)
+        
+   Parameters:
+        optimizer: is the selection of a best element from some set of available alternatives.
+        loss: is a function that maps an event or values of one or move variables onto a real number
+              intuitively representing some "cost" associated with the event.
+        metrics: is a function that is used to judge the performance of your model.
+        batch_size: defines number of samples that going to be propagated through the network.
+        nb_epoch: One Epoch is when an entire dataset is passed forward and backward throught
+                  the neural network only once.
+        validation_data: (x_val, y_val) on which to evaluate the loss and any model metrics
+                         at the end of each epoch.
+"""
+nb_epoch = 20
+batch_size = 32
 
 model = Sequential()
 model.add(embedding_layer)
@@ -108,14 +148,15 @@ model.summary()
 
 t0 = time()
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-rnn = model.fit(X_train, y_train, epochs= nb_epoch, batch_size=batch_size, shuffle=True, validation_data=(X_val, y_val))
+rnn = model.fit(X_train, y_train, epochs=nb_epoch, batch_size=batch_size, shuffle=True, validation_data=(X_val, y_val))
 score = model.evaluate(X_val, y_val)
 
-
+# Save model as file with .h5 extension
 print('Save model...')
 model.save('Models/test.h5')
 print('Saved model to disk...')
 
+# Save word index as pickle file
 print('Save Word index...')
 output = open('Models/finalwordindex.pkl', 'wb')
 pickle.dump(word_index, output)
@@ -134,6 +175,7 @@ sequential_model_to_ascii_printout(model)
 """
 
 print("Training completed in :" + str(t1-t0) + " s.")
+
 # Plots for training and testing process: loss and accuracy
 
 plt.figure(0)
@@ -161,11 +203,6 @@ plt.savefig('Plots/10b.png')
 plt.show()
 
 # Apply Precision-Recall
-
-from sklearn.metrics import recall_score
-from sklearn.metrics import precision_score
-from sklearn.metrics import f1_score
-
 y_pred = model.predict(X_val)
 
 # Convert Y_Test into 1D array
@@ -181,7 +218,6 @@ print("F1 Score: " + str(f1_score(yy_true, yy_scores, average='weighted')))
 
 # Apply Confusion matrix
 
-from sklearn.metrics import classification_report, confusion_matrix
 #Y_pred = model.predict(X_val, verbose=2)
 y_pred = np.argmax(y_pred, axis=1)
 
@@ -191,7 +227,6 @@ cm = confusion_matrix(np.argmax(y_val, axis=1), y_pred)
 print(cm)
 
 # Visualizing of confusion matrix
-import seaborn as sn
 
 df_cm = pd.DataFrame(cm, range(3), range(3))
 plt.figure(figsize=(10,7))
@@ -204,11 +239,7 @@ plt.title("Confusion Matrix")
 plt.savefig('Plots/confusionMatrixFinal.png')
 plt.show()
 
-# ROC Curve
-
-from sklearn.metrics import roc_curve, auc
-from scipy import interp
-from itertools import cycle
+#### ROC Curve ####
 
 # Compute ROC curve and ROC area for each class
 
@@ -273,12 +304,7 @@ plt.show()
 
 
 # Apply Word Cloud and visualize it
-
-from wordcloud import WordCloud
-from many_stop_words import get_stop_words
-
 stop_words = get_stop_words('pl')
-
 wordcloud = WordCloud(
                     background_color='white',
                     stopwords=stop_words,
