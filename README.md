@@ -92,5 +92,5 @@ and extract it in Models/
 ## Contact & blog post
 
 * Main author: [Szymon Płotka](https://github.com/simongeek)
-* CEO of Ermlab Software [Krzysztof Sopyła](https://github.com/ksopyla)
+* CEO of [Ermlab Software](https://ermlab.com) [Krzysztof Sopyła](https://github.com/ksopyla)
 * check Our blog post [Polish sentiment analysis using Keras and Word2vec](https://ermlab.com/en/blog/nlp/polish-sentiment-analysis-using-keras-and-word2vec/)
