@@ -58,7 +58,7 @@ Our dataset was collected from various sources:
 3. [Polish Academy of Science HateSpeech project](http://zil.ipipan.waw.pl/HateSpeech)
 4. YouTube - comments from various videos
 
-Download [Polish Word Embeddings from Polish Academy of Science](https://clarin-pl.eu/dspace/handle/11321/327)
+Download [Polish Word Embeddings from Polish Academy of Science](http://dsmodels.nlp.ipipan.waw.pl/w2v.html)
 and extract it in main folder.
 
 
