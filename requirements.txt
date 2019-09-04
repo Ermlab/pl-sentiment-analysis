@@ -19,6 +19,6 @@ scipy==1.0.0
 tensorboard==1.6.0
 tensorflow==1.6.0
 webencodings==0.5.1
-Werkzeug==0.14.1
+Werkzeug==0.15.3
 wordcloud==1.4
 many_stop_words==0.2.2
