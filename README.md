@@ -40,8 +40,7 @@ pip install -r requirements.txt
 ```
 
 
-Once you have installed Python and the dependencies download at least pre-trained Polish Word Embedding model
-[here](http://dsmodels.nlp.ipipan.waw.pl/dsmodels/nkjp+wiki-forms-all-100-cbow-hs.txt.gz) and extract
+Once you have installed Python and the dependencies download at least [pre-trained Polish Word Embedding model](http://dsmodels.nlp.ipipan.waw.pl/dsmodels/nkjp+wiki-forms-all-100-cbow-hs.txt.gz) and extract
 to main project directory.
 
 The easiest way to see our method in action is to run the LSTM.py script.
