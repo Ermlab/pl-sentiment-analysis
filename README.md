@@ -48,7 +48,7 @@ The easiest way to see our method in action is to run the LSTM.py script.
 
 ## Data
 
-Download our dataset from [Google Drive](https://drive.google.com/open?id=1P87kDKspU8n6V7iHl1Pd-qgT0c-n3VlE)
+Download our dataset from [Google Drive](https://drive.google.com/file/d/1vXqUEBjUHGGy3vV2dA7LlvBjjZlQnl0D/view?usp=sharing)
 and extract to /Data directory.
 
 Our dataset was collected from various sources:
@@ -58,16 +58,8 @@ Our dataset was collected from various sources:
 3. [Polish Academy of Science HateSpeech project](http://zil.ipipan.waw.pl/HateSpeech)
 4. YouTube - comments from various videos
 
-Download Polish Word Embeddings from Polish Academy of Science from [Google Drive](https://drive.google.com/open?id=1LLB0p61b2dk-JJt82n96yhVTSj2ORQsI)
+Download [Polish Word Embeddings from Polish Academy of Science](https://clarin-pl.eu/dspace/handle/11321/327)
 and extract it in main folder.
-
-## Models
-
-Our pre-trained models you can download from [Google Drive](https://drive.google.com/file/d/1avgoKihXVpe16rAGGV1x0j11h5Mjij-e/view?usp=sharing):
-* finalsentimentmodel.h5
-* finalwordindex.pkl
-
-and extract it in Models/
 
 
 ## Useful repos
