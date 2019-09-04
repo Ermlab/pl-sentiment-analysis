@@ -7,7 +7,7 @@ many-stop-words==0.2.2
 Markdown==2.6.11
 MarkupSafe==1.0
 matplotlib==2.1.2
-nltk==3.2.5
+nltk==3.4.5
 numpy==1.14.0
 numpydoc==0.7.0
 olefile==0.45.1
