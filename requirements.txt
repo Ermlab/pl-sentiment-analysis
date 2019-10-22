@@ -13,7 +13,7 @@ numpydoc==0.7.0
 olefile==0.45.1
 pandas==0.22.0
 pandocfilters==1.4.2
-Pillow==5.0.0
+Pillow==6.2.0
 scikit-learn==0.19.1
 scipy==1.0.0
 tensorboard==1.6.0
