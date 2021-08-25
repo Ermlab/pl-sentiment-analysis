@@ -17,7 +17,7 @@ Pillow==5.0.0
 scikit-learn==0.19.1
 scipy==1.0.0
 tensorboard==1.6.0
-tensorflow==1.6.0
+tensorflow==2.5.1
 webencodings==0.5.1
 Werkzeug==0.14.1
 wordcloud==1.4
