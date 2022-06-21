@@ -8,7 +8,7 @@ Markdown==2.6.11
 MarkupSafe==1.0
 matplotlib==2.1.2
 nltk==3.2.5
-numpy==1.14.0
+numpy==1.22.0
 numpydoc==0.7.0
 olefile==0.45.1
 pandas==0.22.0
